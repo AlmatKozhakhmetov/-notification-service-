@@ -1,0 +1,18 @@
+package notificationservice
+# Исполняемые файлы Go
+*.exe
+*.exe.
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Бинарники
+bin/
+cmd/api/api
+
+# VS Code / IDE
+.vscode/
+.idea/
