@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package notification;
+
+option go_package = "github.com/AlmatKozhakhmetov/-notification-service-/api/proto;proto";
+
+service NotificationService {
+  rpc SendNotification (SendRequest) returns (SendResponse);
+}
+
+message SendRequest {
+  string type = 1;
+  string recipient = 2;
+  string message = 3;
+}
+
+message SendResponse {
+  string status = 1;
+  string task_id = 2;
+}

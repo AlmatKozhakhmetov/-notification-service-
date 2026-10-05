@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/AlmatKozhakhmetov/notification-service/internal/domain"
+	"github.com/AlmatKozhakhmetov/-notification-service-/internal/domain"
 )
 
 type WorkerPool struct {

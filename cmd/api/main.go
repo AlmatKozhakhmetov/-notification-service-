@@ -2,22 +2,33 @@ package main
 
 import (
 	"log"
-	"net/http"
+	"net"
 
-	"github.com/AlmatKozhakhmetov/notification-service/internal/handler"
-	"github.com/AlmatKozhakhmetov/notification-service/internal/worker"
+	
+import (
+    "github.com/AlmatKozhakhmetov/-notification-service-/internal/handler"
+    "github.com/AlmatKozhakhmetov/-notification-service-/internal/worker"
 )
 
 func main() {
+	// 1. Запускаем Worker Pool
 	pool := worker.NewWorkerPool(3, 100)
 	pool.Start()
 
-	notifHandler := handler.NewNotificationHandler(pool)
+	// 2. Слушаем TCP-порт 50051 (стандартный порт для gRPC)
+	lis, err := net.Listen("tcp", ":50051")
+	if err != nil {
+		log.Fatalf("Failed to listen on port 50051: %v", err)
+	}
 
-	http.HandleFunc("/api/v1/notifications", notifHandler.Send)
+	// 3. Регистрируем gRPC-сервер
+	grpcServer := grpc.NewServer()
+	grpcHandler := handler.NewGRPCHandler(pool)
 
-	log.Println("Notification service running on :8081...")
-	if err := http.ListenAndServe(":8081", nil); err != nil {
-		log.Fatalf("Server failed: %v", err)
+	pb.RegisterNotificationServiceServer(grpcServer, grpcHandler)
+
+	log.Println("gRPC Notification service running on :50051...")
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("Failed to serve gRPC: %v", err)
 	}
 }
